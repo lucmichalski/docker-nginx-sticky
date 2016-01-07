@@ -12,21 +12,14 @@ done
 sed -i '/include \/etc\/nginx\/conf.d/q' /etc/nginx/nginx.conf
 echo '}' >> /etc/nginx/nginx.conf 
 
+ENVUP=$(echo $ENVIRONMENT | awk '{print toupper($0)}')
 cat <<- EOF > /etc/nginx/conf.d/server.conf
 
 upstream backend {
+    server $IRCAPI0_SERVICE_HOST:$IRCAPI0_SERVICE_PORT;
+    server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
+    server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
 
-EOF
-M=$(($(env | grep -i ${ENVIRONMENT}_IRCAPI*_SERVICE_HOST | wc -l )+1))
-X=0
-while [ $X -le $M ]; do
-cat <<- EOF >> /etc/nginx/conf.d/server.conf
-    server ${ENVIRONMENT}_IRCAPI${X}_SERVICE_HOST:${ENVIRONMENT}_IRCAPI${X}_SERVICE_PORT;
-EOF
-X=$((X+1))
-done;
-
-cat <<- EOF >> /etc/nginx/conf.d/server.conf
     sticky cookie srv_id expires=1h;
 }
 
