@@ -37,11 +37,10 @@ http {
     default_type        application/octet-stream;
 
     upstream backend {
+        sticky;
         server $IRCAPI0_SERVICE_HOST:$IRCAPI0_SERVICE_PORT;
         server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
         server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
-
-        sticky cookie srv_id expires=1h;
     }
 
     server {
