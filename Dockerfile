@@ -11,7 +11,7 @@ RUN curl -o nginx.tar.gz http://nginx.org/download/nginx-${VERSION}.tar.gz && \
     usermod -s /sbin/nologin nginx && \
     tar -xvzf nginx.tar.gz && \
     mv nginx-${VERSION} nginx && \
-    git clone git@bitbucket.org:nginx-goodies/nginx-sticky-module-ng.git
+    git clone https://bitbucket.org/nginx-goodies/nginx-sticky-module-ng.git
 
 WORKDIR nginx
 RUN ./configure --user=nginx --group=nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log  --with-select_module --with-poll_module --with-file-aio --with-ipv6 --with-http_ssl_module  --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_geoip_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-cpp_test_module  --with-cpu-opt=CPU --with-pcre  --with-pcre-jit  --with-md5-asm  --with-sha1-asm  --with-zlib-asm=CPU --with-libatomic --with-debug --with-ld-opt="-Wl,-E" --add-module=/nginx-sticky-module-ng && \
