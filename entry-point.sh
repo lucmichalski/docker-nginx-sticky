@@ -38,9 +38,9 @@ http {
 
     upstream backend {
         sticky;
-        server $IRCAPI0_SERVICE_HOST;#:$IRCAPI0_SERVICE_PORT;
-        server $IRCAPI1_SERVICE_HOST;#:$IRCAPI1_SERVICE_PORT;
-        server $IRCAPI2_SERVICE_HOST;#:$IRCAPI2_SERVICE_PORT;
+        server $IRCAPI0_SERVICE_HOST:$IRCAPI0_SERVICE_PORT;
+        server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
+        server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
     }
 
     server {
@@ -55,7 +55,7 @@ http {
             proxy_set_header Host \$host;
             proxy_set_header X-Real-IP \$remote_addr;
             proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;     
-            proxy_set_header X_FORWARDED_PROTO \$scheme;
+            proxy_set_header X_FORWARDED_PROTO https;
         }
     }
 }
