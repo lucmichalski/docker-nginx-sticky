@@ -41,7 +41,7 @@ http {
         server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
         server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
 
-        sticky cookie srv_id expires=1h;
+ #       sticky cookie srv_id expires=1h;
     }
 
     server {
