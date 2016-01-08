@@ -9,28 +9,50 @@ for f in /etc/secrets/* ; do
     fi
 done
 
-sed -i '/include \/etc\/nginx\/conf.d/q' /etc/nginx/nginx.conf
-echo '}' >> /etc/nginx/nginx.conf 
+cat <<- EOF > /etc/nginx/nginx.conf
 
-ENVUP=$(echo $ENVIRONMENT | awk '{print toupper($0)}')
-cat <<- EOF > /etc/nginx/conf.d/server.conf
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
 
-upstream backend {
-    server $IRCAPI0_SERVICE_HOST:$IRCAPI0_SERVICE_PORT;
-    server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
-    server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
-
-    #sticky cookie srv_id expires=1h;
+events {
+    worker_connections 1024;
 }
 
-server {
-    listen       ${PORT:-8000} default_server;
-    listen       [::]:${PORT:-8000} default_server;
-    server_name  _;
+http {
+    log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                      '\$status \$body_bytes_sent "\$http_referer" '
+                      '"\$http_user_agent" "\$http_x_forwarded_for"';
 
-    location / {
-        proxy_pass https://backend;
-        proxy_ssl_verify              off;
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    upstream backend {
+        server $IRCAPI0_SERVICE_HOST:$IRCAPI0_SERVICE_PORT;
+        server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
+        server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
+
+        sticky cookie srv_id expires=1h;
+    }
+
+    server {
+        listen       ${PORT:-8000} default_server;
+        listen       [::]:${PORT:-8000} default_server;
+        server_name  _;
+
+        location / {
+            proxy_pass https://backend;
+            proxy_ssl_verify              off;
+        }
     }
 }
 EOF
