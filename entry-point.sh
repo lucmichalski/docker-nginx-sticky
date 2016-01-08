@@ -38,9 +38,9 @@ http {
 
     upstream backend {
         sticky;
-        server $IRCAPI0_SERVICE_HOST:$IRCAPI0_SERVICE_PORT;
-        server $IRCAPI1_SERVICE_HOST:$IRCAPI1_SERVICE_PORT;
-        server $IRCAPI2_SERVICE_HOST:$IRCAPI2_SERVICE_PORT;
+        server $IRCAPI0_SERVICE_HOST;#:$IRCAPI0_SERVICE_PORT;
+        server $IRCAPI1_SERVICE_HOST;#:$IRCAPI1_SERVICE_PORT;
+        server $IRCAPI2_SERVICE_HOST;#:$IRCAPI2_SERVICE_PORT;
     }
 
     server {
