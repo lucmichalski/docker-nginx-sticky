@@ -50,7 +50,6 @@ http {
  
         location / {
             proxy_pass https://backend;
-            proxy_ssl on;
             proxy_ssl_verify off;
             proxy_redirect     off;
             proxy_set_header Host \$host;
