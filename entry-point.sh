@@ -29,7 +29,8 @@ server {
     server_name  _;
 
     location / {
-        proxy_pass http://backend;
+        proxy_pass https://backend;
+        proxy_ssl_verify              off;
     }
 }
 EOF
